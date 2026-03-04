@@ -550,7 +550,7 @@ pub const mi_option_max_segment_reclaim: mi_option_t = 21;
 #[cfg(not(feature = "v3"))]
 pub const _mi_option_last: mi_option_t = 37;
 #[cfg(feature = "v3")]
-pub const _mi_option_last: mi_option_t = 43;
+pub const _mi_option_last: mi_option_t = 46;
 
 extern "C" {
     // Note: mi_option_{enable,disable} aren't exposed because they're redundant
@@ -661,8 +661,12 @@ pub struct mi_heap_area_t {
     pub block_size: usize,
     /// Size in bytes of a full block including padding and metadata.
     pub full_block_size: usize,
-    /// Heap tag associated with this area
+    /// Heap tag associated with this area (not available in v3)
+    #[cfg(not(feature = "v3"))]
     pub heap_tag: i32,
+    /// Reserved / internal (replaces `heap_tag` in v3)
+    #[cfg(feature = "v3")]
+    pub reserved1: *mut c_void,
 }
 
 /// Visitor function passed to [`mi_heap_visit_blocks`]
@@ -708,9 +712,15 @@ extern "C" {
     /// Set the default heap to use for [`mi_malloc`](crate::mi_malloc) et al.
     ///
     /// Returns the previous default heap.
+    ///
+    /// Note: not available when using the `v3` feature (removed in mimalloc v3.2).
+    #[cfg(not(feature = "v3"))]
     pub fn mi_heap_set_default(heap: *mut mi_heap_t) -> *mut mi_heap_t;
 
     /// Get the default heap that is used for [`mi_malloc`](crate::mi_malloc) et al.
+    ///
+    /// Note: not available when using the `v3` feature (removed in mimalloc v3.2).
+    #[cfg(not(feature = "v3"))]
     pub fn mi_heap_get_default() -> *mut mi_heap_t;
 
     /// Get the backing heap.
@@ -718,6 +728,9 @@ extern "C" {
     /// The _backing_ heap is the initial default heap for a thread and always
     /// available for allocations. It cannot be destroyed or deleted except by
     /// exiting the thread.
+    ///
+    /// Note: not available when using the `v3` feature (removed in mimalloc v3.2).
+    #[cfg(not(feature = "v3"))]
     pub fn mi_heap_get_backing() -> *mut mi_heap_t;
 
     /// Release outstanding resources in a specific heap.
@@ -912,7 +925,9 @@ extern "C" {
     ///
     /// Returns `true` if the block pointed to by `p` is in the `heap`.
     ///
-    /// See [`mi_heap_check_owned`].
+    /// Note: not available when using the `v3` feature (removed in mimalloc v3.2;
+    /// use `mi_heap_contains` from the C API directly if needed).
+    #[cfg(not(feature = "v3"))]
     pub fn mi_heap_contains_block(heap: *mut mi_heap_t, p: *const c_void) -> bool;
 
     /// Check safely if any pointer is part of a heap.
@@ -923,8 +938,8 @@ extern "C" {
     ///
     /// Note: expensive function, linear in the pages in the heap.
     ///
-    /// See [`mi_heap_contains_block`], [`mi_heap_get_default`], and
-    /// [`mi_is_in_heap_region`]
+    /// Note: not available when using the `v3` feature (removed in mimalloc v3.2).
+    #[cfg(not(feature = "v3"))]
     pub fn mi_heap_check_owned(heap: *mut mi_heap_t, p: *const c_void) -> bool;
 
     /// Check safely if any pointer is part of the default heap of this thread.
