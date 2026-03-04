@@ -1,5 +1,5 @@
 [package]
-name = "mimalloc"
+name = "bc-mimalloc"
 version = "0.1.48"
 authors = [
     "Octavian Oncescu <octavonce@gmail.com>",
@@ -7,10 +7,10 @@ authors = [
     "Thom Chiovoloni <chiovolonit@gmail.com>",
 ]
 edition = "2018"
-repository = "https://github.com/purpleprotocol/mimalloc_rust"
+repository = "https://github.com/leshow/mimalloc_rust"
 keywords = ["mimalloc", "allocator", "encrypted-heap", "performance"]
 categories = ["memory-management", "api-bindings"]
-description = "Performance and security oriented drop-in allocator"
+description = "Performance and security oriented drop-in allocator (updated to v2.2.7 and v3.2.8, respectively)"
 license = "MIT"
 readme = "README.md"
 
@@ -25,7 +25,7 @@ members = [
 travis-ci = { repository = "purpleprotocol/mimalloc_rust" }
 
 [dependencies]
-libmimalloc-sys = { path = "libmimalloc-sys", version = "0.1.44", default-features = false }
+libmimalloc-sys = { package = "bc-libmimalloc-sys", path = "libmimalloc-sys", version = "0.1.44", default-features = false }
 
 [features]
 default = []
