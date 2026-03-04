@@ -965,19 +965,8 @@ extern "C" {
     /// Returns `true` if all areas and blocks were visited.
     ///
     /// Passing a `None` visitor is allowed, and is a no-op.
-    #[cfg(not(feature = "v3"))]
     pub fn mi_heap_visit_blocks(
         heap: *const mi_heap_t,
-        visit_all_blocks: bool,
-        visitor: mi_block_visit_fun,
-        arg: *mut c_void,
-    ) -> bool;
-    /// Returns `true` if all areas and blocks were visited.
-    ///
-    /// Passing a `None` visitor is allowed, and is a no-op.
-    #[cfg(feature = "v3")]
-    pub fn mi_heap_visit_blocks(
-        heap: *mut mi_heap_t,
         visit_all_blocks: bool,
         visitor: mi_block_visit_fun,
         arg: *mut c_void,
