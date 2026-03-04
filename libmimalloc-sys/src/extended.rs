@@ -548,7 +548,7 @@ pub const mi_option_max_segment_reclaim: mi_option_t = 21;
 
 /// Last option.
 #[cfg(not(feature = "v3"))]
-pub const _mi_option_last: mi_option_t = 37;
+pub const _mi_option_last: mi_option_t = 38;
 #[cfg(feature = "v3")]
 pub const _mi_option_last: mi_option_t = 46;
 
