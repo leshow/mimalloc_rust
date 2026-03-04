@@ -5,7 +5,7 @@ on:
   pull_request:
   # Run daily to catch when Rust updates cause problems to happen.
   schedule:
-    - cron: '00 01 * * *'
+    - cron: "00 01 * * *"
 
 jobs:
   rust:
@@ -115,7 +115,6 @@ jobs:
     name: Check documentation
     runs-on: ubuntu-latest
     steps:
-
       - uses: actions/checkout@v4
         with:
           submodules: recursive
@@ -127,8 +126,8 @@ jobs:
       # gets us the nicer syntax for linking to functions, and is in-line with
       # what docs.rs uses.
 
-      - name: 'Check documentation links in `mimalloc`'
+      - name: "Check documentation links in `mimalloc`"
         run: cargo rustdoc -- -D warnings
 
-      - name: 'Check documentation links in `libmimalloc-sys`'
-        run: cargo rustdoc -p libmimalloc-sys -- -D warnings
+      - name: "Check documentation links in `bc-libmimalloc-sys`"
+        run: cargo rustdoc -p bc-libmimalloc-sys -- -D warnings

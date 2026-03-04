@@ -8,7 +8,7 @@ license = "MIT"
 publish = false
 
 [dependencies]
-libmimalloc-sys = { path = ".." }
+libmimalloc-sys = { package = "bc-libmimalloc-sys", path = ".." }
 libc = "0.2"
 
 [build-dependencies]

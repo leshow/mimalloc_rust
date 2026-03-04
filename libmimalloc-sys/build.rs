@@ -89,7 +89,7 @@ fn main() {
         // For instance, on certain platforms, llvm has relocated the atomic of the arm32 architecture to libclang_rt.builtins.a
         // while some use libatomic.a, and others use libatomic_ops.a.
         let atomic_name = env::var("DEP_ATOMIC").unwrap_or("atomic".to_owned());
-        println!("cargo:rustc-link-lib={}", atomic_name);
+        println!("cargo:rustc-link-lib={atomic_name}");
     }
 
     // Link with libs needed on Windows
@@ -98,7 +98,7 @@ fn main() {
         let libs = ["psapi", "shell32", "user32", "advapi32", "bcrypt"];
 
         for lib in libs {
-            println!("cargo:rustc-link-lib={}", lib);
+            println!("cargo:rustc-link-lib={lib}");
         }
     }
 }
