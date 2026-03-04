@@ -525,6 +525,9 @@ pub const mi_option_reserve_huge_os_pages_at: mi_option_t = 8;
 pub const mi_option_reserve_os_memory: mi_option_t = 9;
 
 /// Option (experimental) the first N segments per thread are not eagerly committed (=1).
+///
+/// Note: removed/renamed in v3 (`mi_option_deprecated_eager_commit_delay`).
+#[cfg(not(feature = "v3"))]
 pub const mi_option_eager_commit_delay: mi_option_t = 14;
 
 /// Option (experimental) Pretend there are at most N NUMA nodes; Use 0 to use the actual detected NUMA nodes at runtime.
@@ -965,8 +968,30 @@ extern "C" {
     /// Returns `true` if all areas and blocks were visited.
     ///
     /// Passing a `None` visitor is allowed, and is a no-op.
+    #[cfg(not(feature = "v3"))]
     pub fn mi_heap_visit_blocks(
         heap: *const mi_heap_t,
+        visit_all_blocks: bool,
+        visitor: mi_block_visit_fun,
+        arg: *mut c_void,
+    ) -> bool;
+    /// Visit all areas and blocks in `heap`.
+    ///
+    /// If `visit_all_blocks` is false, the `visitor` is only called once for
+    /// every heap area. If it's true, the `visitor` is also called for every
+    /// allocated block inside every area (with `!block.is_null()`). Return
+    /// `false` from the `visitor` to return early.
+    ///
+    /// `arg` is an extra argument passed into the `visitor`.
+    ///
+    /// Returns `true` if all areas and blocks were visited.
+    ///
+    /// Passing a `None` visitor is allowed, and is a no-op.
+    ///
+    /// Note: in v3 the `heap` parameter is non-const compared to v2.
+    #[cfg(feature = "v3")]
+    pub fn mi_heap_visit_blocks(
+        heap: *mut mi_heap_t,
         visit_all_blocks: bool,
         visitor: mi_block_visit_fun,
         arg: *mut c_void,
