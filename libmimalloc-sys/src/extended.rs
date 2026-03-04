@@ -314,6 +314,9 @@ extern "C" {
     /// Merge thread local statistics with the main statistics and reset.
     ///
     /// Note: This function is thread safe.
+    ///
+    /// Note: not available in v3 (declared in header but not implemented).
+    #[cfg(not(feature = "v3"))]
     pub fn mi_stats_merge();
 
     /// Return the mimalloc version number.
