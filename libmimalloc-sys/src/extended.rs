@@ -653,6 +653,10 @@ extern "C" {
 /// ```
 pub enum mi_heap_t {}
 
+/// Opaque type for a mimalloc thread-local heap (`mi_theap_s`) — v3 only.
+#[cfg(feature = "v3")]
+pub enum mi_theap_t {}
+
 /// An area of heap space contains blocks of a single size.
 ///
 /// The bytes in freed blocks are `committed - used`.
@@ -1028,7 +1032,7 @@ extern "C" {
     /// Equivalent to [`mi_heap_zalloc_small`], but for a thread-local heap (`theap`) in v3.
     ///
     /// `size` must be smaller or equal to [`MI_SMALL_SIZE_MAX`].
-    pub fn mi_theap_zalloc_small(theap: *mut mi_heap_t, size: usize) -> *mut c_void;
+    pub fn mi_theap_zalloc_small(theap: *mut mi_theap_t, size: usize) -> *mut c_void;
 
     #[cfg(feature = "arena")]
     /// Create a heap that only allocates in the specified arena

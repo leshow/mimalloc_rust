@@ -26,6 +26,8 @@ exclude = [
 
 [dependencies]
 cty = { version = "0.2", optional = true }
+
+[dev-dependencies]
 libc = "0.2"
 
 [build-dependencies]
