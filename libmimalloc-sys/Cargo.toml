@@ -32,6 +32,7 @@ libc = "0.2"
 cc = "1.0"
 
 [features]
+default = ["v3"]
 secure = []
 debug = []
 debug_in_debug = []
@@ -44,4 +45,4 @@ v3 = []
 
 # Show `extended` on docs.rs since it's the full API surface.
 [package.metadata.docs.rs]
-features = ["extended"]
+features = ["extended", "v3"]

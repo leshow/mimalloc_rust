@@ -26,10 +26,10 @@ members = [
 travis-ci = { repository = "purpleprotocol/mimalloc_rust" }
 
 [dependencies]
-libmimalloc-sys = { package = "bc-libmimalloc-sys", path = "libmimalloc-sys", version = "0.1.44", default-features = false }
+libmimalloc-sys = { package = "bc-libmimalloc-sys", path = "libmimalloc-sys", version = "0.2.0", default-features = false }
 
 [features]
-default = []
+default = ["v3"]
 secure = ["libmimalloc-sys/secure"]
 override = ["libmimalloc-sys/override"]
 debug = ["libmimalloc-sys/debug"]
