@@ -63,8 +63,8 @@ jobs:
       - name: Build (v3, secure)
         run: cargo build --features v3,secure
 
-      # - name: Test (v3, secure)
-      #   run: cargo test --features v3,secure
+      - name: Test (v3, secure)
+        run: cargo test --features v3,secure
 
       - name: Test libmimalloc-sys crate bindings (v3, secure)
         run: cargo run --features libmimalloc-sys-test/v3,libmimalloc-sys-test/secure -p libmimalloc-sys-test

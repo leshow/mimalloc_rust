@@ -38,8 +38,6 @@ To enable secure mode, put in `Cargo.toml`:
 bc-mimalloc = { version = "*", features = ["secure"] }
 ```
 
-**NOTE**: I have disabled the secure + v3 test runner as it seems to deadlock or run forever in the CI on v3.3.0.
-
 ## Usage with v3
 
 By default this library uses mimalloc `v2` (currently **v2.3.0**).
