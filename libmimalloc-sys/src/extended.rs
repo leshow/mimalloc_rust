@@ -1091,8 +1091,6 @@ extern "C" {
 #[cfg(test)]
 mod tests {
     use super::*;
-    #[allow(unused_imports)] // for vscode seems to not compile with extended enabled
-    use crate::mi_malloc;
 
     #[test]
     fn it_calculates_usable_size() {
