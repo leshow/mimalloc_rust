@@ -10,7 +10,7 @@ edition = "2018"
 repository = "https://github.com/leshow/mimalloc_rust"
 keywords = ["mimalloc", "allocator", "encrypted-heap", "performance"]
 categories = ["memory-management", "api-bindings"]
-description = "Performance and security oriented drop-in allocator (updated to v2.2.7 and v3.2.8, respectively)"
+description = "performance and security oriented drop-in allocator (updated to v2.2.7 and v3.2.8, respectively)"
 license = "MIT"
 readme = "README.md"
 
