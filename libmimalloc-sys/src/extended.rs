@@ -202,6 +202,10 @@ extern "C" {
     /// know for certain.
     pub fn mi_zalloc_small(size: usize) -> *mut c_void;
 
+    /// Free a small object. Only use to free objects from [`mi_malloc_small`]
+    /// or [`mi_zalloc_small`]. Potentially a tiny bit faster than [`mi_free`](crate::mi_free).
+    pub fn mi_free_small(p: *mut c_void);
+
     /// Return the available bytes in a memory block.
     ///
     /// The returned size can be used to call `mi_expand` successfully.
@@ -473,9 +477,13 @@ pub type mi_error_fun = Option<unsafe extern "C" fn(code: c_int, arg: *mut c_voi
 /// Runtime options. All options are false by default.
 pub type mi_option_t = c_int;
 
-#[cfg(feature = "arena")]
+#[cfg(all(feature = "arena", not(feature = "v3")))]
 /// Arena Id
 pub type mi_arena_id_t = c_int;
+
+#[cfg(all(feature = "arena", feature = "v3"))]
+/// Arena Id
+pub type mi_arena_id_t = *mut c_void;
 
 // Note: mimalloc doc website seems to have the order of show_stats and
 // show_errors reversed as of 1.6.3, however what I have here is correct:
@@ -649,6 +657,10 @@ extern "C" {
 /// ```
 pub enum mi_heap_t {}
 
+/// Opaque type for a mimalloc thread-local heap (`mi_theap_s`) — v3 only.
+#[cfg(feature = "v3")]
+pub enum mi_theap_t {}
+
 /// An area of heap space contains blocks of a single size.
 ///
 /// The bytes in freed blocks are `committed - used`.
@@ -765,6 +777,12 @@ extern "C" {
     ///
     /// `size` must be smaller or equal to [`MI_SMALL_SIZE_MAX`].
     pub fn mi_heap_malloc_small(heap: *mut mi_heap_t, size: usize) -> *mut c_void;
+
+    /// Equivalent to [`mi_zalloc_small`], but allocates out of the specific
+    /// heap instead of the default.
+    ///
+    /// `size` must be smaller or equal to [`MI_SMALL_SIZE_MAX`].
+    pub fn mi_heap_zalloc_small(heap: *mut mi_heap_t, size: usize) -> *mut c_void;
 
     /// Equivalent to [`mi_realloc`](crate::mi_realloc), but allocates out of
     /// the specific heap instead of the default.
@@ -1000,6 +1018,26 @@ extern "C" {
         arg: *mut c_void,
     ) -> bool;
 
+    /// Check if the heap page containing `p` is under-utilized.
+    ///
+    /// # Safety
+    /// Assumes the page belonging to `p` is only accessed by the calling thread.
+    pub fn mi_unsafe_heap_page_is_under_utilized(
+        heap: *mut mi_heap_t,
+        p: *mut c_void,
+        perc_threshold: usize,
+    ) -> bool;
+
+    #[cfg(feature = "v3")]
+    /// Return the minimum size for an arena (v3 only).
+    pub fn mi_arena_min_size() -> usize;
+
+    #[cfg(feature = "v3")]
+    /// Equivalent to [`mi_heap_zalloc_small`], but for a thread-local heap (`theap`) in v3.
+    ///
+    /// `size` must be smaller or equal to [`MI_SMALL_SIZE_MAX`].
+    pub fn mi_theap_zalloc_small(theap: *mut mi_theap_t, size: usize) -> *mut c_void;
+
     #[cfg(feature = "arena")]
     /// Create a heap that only allocates in the specified arena
     pub fn mi_heap_new_in_arena(arena_id: mi_arena_id_t) -> *mut mi_heap_t;
@@ -1036,10 +1074,10 @@ extern "C" {
     ///
     /// - `start` Start of the memory area
     /// - `size` The size of the memory area. Must be large than `MI_ARENA_BLOCK_SIZE` (e.g. 64MB
-    ///          on x86_64 machines).
+    ///   on x86_64 machines).
     /// - `commit` Set true if the memory range is already commited.
     /// - `is_large` Set true if the memory range consists of large files, or if the memory should
-    ///              not be decommitted or protected (like rdma etc.).
+    ///   not be decommitted or protected (like rdma etc.).
     /// - `is_zero` Set true if the memory range consists only of zeros.
     /// - `numa_node` Possible associated numa node or `-1`.
     /// - `exclusive` Only allow allocations if specifically for this arena.
