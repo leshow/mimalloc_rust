@@ -477,9 +477,13 @@ pub type mi_error_fun = Option<unsafe extern "C" fn(code: c_int, arg: *mut c_voi
 /// Runtime options. All options are false by default.
 pub type mi_option_t = c_int;
 
-#[cfg(feature = "arena")]
+#[cfg(all(feature = "arena", not(feature = "v3")))]
 /// Arena Id
 pub type mi_arena_id_t = c_int;
+
+#[cfg(all(feature = "arena", feature = "v3"))]
+/// Arena Id
+pub type mi_arena_id_t = *mut c_void;
 
 // Note: mimalloc doc website seems to have the order of show_stats and
 // show_errors reversed as of 1.6.3, however what I have here is correct:
