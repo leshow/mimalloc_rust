@@ -115,7 +115,7 @@ fn secure_level() -> Option<&'static str> {
     ];
 
     let enabled: Vec<_> = levels
-        .into_iter()
+        .iter()
         .filter(|(env_var, _)| env::var_os(env_var).is_some())
         .collect();
 
