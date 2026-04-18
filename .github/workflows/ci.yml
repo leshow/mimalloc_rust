@@ -2,10 +2,18 @@ name: CI
 
 on:
   push:
+    branches:
+      - "master"
+    tags:
+      - "*"
   pull_request:
+  workflow_dispatch:
   # Run daily to catch when Rust updates cause problems to happen.
   schedule:
     - cron: "00 01 * * *"
+
+permissions:
+  contents: read
 
 jobs:
   rust:
@@ -13,8 +21,8 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        toolchain: ["stable"]
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+        toolchain: [ "stable" ]
 
     runs-on: ${{ matrix.os }}
 
@@ -24,12 +32,13 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           submodules: recursive
+          persist-credentials: false
 
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@master
+        uses: dtolnay/rust-toolchain@e97e2d8cc328f1b50210efc529dca0028893a2d9 # v1
         with:
           toolchain: ${{ matrix.toolchain }}
 
@@ -96,11 +105,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
+          persist-credentials: false
           submodules: recursive
 
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@e97e2d8cc328f1b50210efc529dca0028893a2d9 # v1
         with:
           components: rustfmt, clippy
 
@@ -115,11 +125,12 @@ jobs:
     name: Check documentation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           submodules: recursive
+          persist-credentials: false
 
-      - uses: dtolnay/rust-toolchain@nightly
+      - uses: dtolnay/rust-toolchain@e97e2d8cc328f1b50210efc529dca0028893a2d9 # v1
 
       # Note: We need to use nightly rust, and `cargo rustdoc` (yes, not `cargo
       # doc`) to actually get it to respect -D warnings... Using nightly also
