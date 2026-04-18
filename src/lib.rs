@@ -24,6 +24,16 @@
 //! [dependencies]
 //! mimalloc = { version = "*", features = ["secure"] }
 //! ```
+//!
+//! For explicit security levels, use one of `secure_level_1` through
+//! `secure_level_5`:
+//! ```rust,ignore
+//! [dependencies]
+//! bc-mimalloc = { version = "*", features = ["v3", "secure_level_5"] }
+//! ```
+//!
+//! Only one secure level can be enabled at a time. `secure_level_5` requires
+//! the `v3` feature.
 
 extern crate libmimalloc_sys as ffi;
 
@@ -52,13 +62,13 @@ unsafe impl GlobalAlloc for MiMalloc {
     }
 
     #[inline]
-    unsafe fn alloc_zeroed(&self, layout: Layout) -> *mut u8 {
-        mi_zalloc_aligned(layout.size(), layout.align()) as *mut u8
+    unsafe fn dealloc(&self, ptr: *mut u8, _layout: Layout) {
+        mi_free(ptr as *mut c_void);
     }
 
     #[inline]
-    unsafe fn dealloc(&self, ptr: *mut u8, _layout: Layout) {
-        mi_free(ptr as *mut c_void);
+    unsafe fn alloc_zeroed(&self, layout: Layout) -> *mut u8 {
+        mi_zalloc_aligned(layout.size(), layout.align()) as *mut u8
     }
 
     #[inline]

@@ -49,6 +49,8 @@ fn main() {
 
     if env::var_os("CARGO_FEATURE_SECURE").is_some() {
         build.define("MI_SECURE", "4");
+    } else if let Some(secure_level) = secure_level() {
+        build.define("MI_SECURE", secure_level);
     }
 
     let dynamic_tls = env::var("CARGO_FEATURE_LOCAL_DYNAMIC_TLS").is_ok();
@@ -101,4 +103,29 @@ fn main() {
             println!("cargo:rustc-link-lib={lib}");
         }
     }
+}
+
+fn secure_level() -> Option<&'static str> {
+    let levels = [
+        ("CARGO_FEATURE_SECURE_LEVEL_1", "1"),
+        ("CARGO_FEATURE_SECURE_LEVEL_2", "2"),
+        ("CARGO_FEATURE_SECURE_LEVEL_3", "3"),
+        ("CARGO_FEATURE_SECURE_LEVEL_4", "4"),
+        ("CARGO_FEATURE_SECURE_LEVEL_5", "5"),
+    ];
+
+    let enabled: Vec<_> = levels
+        .into_iter()
+        .filter(|(env_var, _)| env::var_os(env_var).is_some())
+        .collect();
+
+    if env::var_os("CARGO_FEATURE_SECURE").is_some() && !enabled.is_empty() {
+        panic!("feature `secure` cannot be combined with `secure_level_*` features");
+    }
+
+    if enabled.len() > 1 {
+        panic!("multiple secure levels enabled at once");
+    }
+
+    enabled.first().map(|(_, level)| *level)
 }

@@ -2,7 +2,13 @@ use std::env;
 
 fn main() {
     let cargo_manifest_dir = env!("CARGO_MANIFEST_DIR");
-    let secure = if env::var("CARGO_FEATURE_SECURE").is_ok() {
+    let secure = if env::var("CARGO_FEATURE_SECURE").is_ok()
+        || env::var("CARGO_FEATURE_SECURE_LEVEL_1").is_ok()
+        || env::var("CARGO_FEATURE_SECURE_LEVEL_2").is_ok()
+        || env::var("CARGO_FEATURE_SECURE_LEVEL_3").is_ok()
+        || env::var("CARGO_FEATURE_SECURE_LEVEL_4").is_ok()
+        || env::var("CARGO_FEATURE_SECURE_LEVEL_5").is_ok()
+    {
         Some("secure")
     } else {
         None

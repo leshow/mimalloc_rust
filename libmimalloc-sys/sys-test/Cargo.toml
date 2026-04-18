@@ -15,6 +15,11 @@ libc = "0.2"
 ctest2 = "0.4"
 
 [features]
-secure = ["libmimalloc-sys/secure"]
+secure = ["libmimalloc-sys/secure_level_4"]
+secure_level_1 = ["libmimalloc-sys/secure_level_1"]
+secure_level_2 = ["libmimalloc-sys/secure_level_2"]
+secure_level_3 = ["libmimalloc-sys/secure_level_3"]
+secure_level_4 = ["libmimalloc-sys/secure_level_4"]
+secure_level_5 = ["libmimalloc-sys/secure_level_5"]
 extended = ["libmimalloc-sys/extended"]
 v3 = ["libmimalloc-sys/v3"]

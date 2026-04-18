@@ -33,14 +33,34 @@ own benchmarks.
 
 To enable secure mode, put in `Cargo.toml`:
 
-```ini
+```toml
 [dependencies]
 bc-mimalloc = { version = "*", features = ["secure"] }
 ```
 
+For explicit security levels, use one of `secure_level_1` through
+`secure_level_5`:
+
+```toml
+[dependencies]
+bc-mimalloc = { version = "*", features = ["v3", "secure_level_5"] }
+```
+
+The v3 / v2 secure levels map to mimalloc's options:
+
+- `secure_level_1`: guard pages around metadata, randomized arena allocation,
+  abort on detected metadata corruption
+- `secure_level_2`: randomized relative allocation addresses within mimalloc
+  pages
+- `secure_level_3`: encoded free lists to detect corruption and invalid frees
+- `secure_level_4`: double-free checks
+- `secure_level_5`: guard page at the end of each mimalloc page; expensive
+
+Only one secure level can be enabled at a time.
+
 ## Usage with v3
 
-By default this library uses mimalloc `v2` (currently **v2.3.0**).
+By default, this library uses mimalloc `v2` (currently **v2.3.0**).
 To enable `v3` (**v3.3.0**), put in `Cargo.toml`:
 
 ```ini

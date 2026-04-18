@@ -30,7 +30,12 @@ libmimalloc-sys = { package = "bc-libmimalloc-sys", path = "libmimalloc-sys", ve
 
 [features]
 default = []
-secure = ["libmimalloc-sys/secure"]
+secure = ["libmimalloc-sys/secure_level_4"]
+secure_level_1 = ["libmimalloc-sys/secure_level_1"]
+secure_level_2 = ["libmimalloc-sys/secure_level_2"]
+secure_level_3 = ["libmimalloc-sys/secure_level_3"]
+secure_level_4 = ["libmimalloc-sys/secure_level_4"]
+secure_level_5 = ["libmimalloc-sys/secure_level_5"]
 override = ["libmimalloc-sys/override"]
 debug = ["libmimalloc-sys/debug"]
 debug_in_debug = ["libmimalloc-sys/debug_in_debug"]
